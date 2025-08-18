@@ -38,3 +38,6 @@ coverage/
 
 # Production files
 *.production
+
+# Playwright MCP
+.playwright-mcp/

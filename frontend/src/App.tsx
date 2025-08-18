@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import ProductCard from './components/ProductCard';
-import { Product, ApiResponse } from './types/Product';
+import { Product, ApiResponse, Category } from './types/Product';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -39,7 +39,7 @@ function App() {
   const fetchCategories = async () => {
     try {
       const response = await fetch(`${API_URL}/categories`);
-      const data: ApiResponse<string[]> = await response.json();
+      const data: ApiResponse<Category[]> = await response.json();
       
       if (data.success) {
         setCategories(data.data);
@@ -51,7 +51,7 @@ function App() {
 
   const filteredProducts = selectedCategory === 'all' 
     ? products 
-    : products.filter(product => product.category === selectedCategory);
+    : products.filter(product => product.category.name === selectedCategory);
 
   return (
     <div className="App">
@@ -71,7 +71,7 @@ function App() {
           >
             <option value="all">All Categories</option>
             {categories.map(category => (
-              <option key={category} value={category}>{category}</option>
+              <option key={category.id} value={category.name}>{category.name}</option>
             ))}
           </select>
         </div>
