@@ -4,12 +4,14 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: petshop_postgres
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: petshop_user
-      POSTGRES_PASSWORD: petshop_password
-      POSTGRES_DB: petshop_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5532:5432"
+      - "${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:

@@ -1,21 +1,23 @@
 import 'reflect-metadata';
 import app from './app';
 import dotenv from 'dotenv';
+import path from 'path';
 import { AppDataSource } from './config/typeorm.config';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.BACKEND_PORT || 8080;
 
 const startServer = async () => {
   try {
     await AppDataSource.initialize();
     console.log('Database connection established successfully');
 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-      console.log(`Environment: ${process.env.NODE_ENV}`);
-      console.log(`API available at http://localhost:${PORT}/api`);
+    const HOST = process.env.BACKEND_HOST || 'localhost';
+    app.listen(Number(PORT), HOST, () => {
+      console.log(`Server is running on http://${HOST}:${PORT}`);
+      console.log(`Environment: ${process.env.BACKEND_NODE_ENV}`);
+      console.log(`API available at http://${HOST}:${PORT}/api`);
     });
   } catch (error) {
     console.error('Error starting server:', error);

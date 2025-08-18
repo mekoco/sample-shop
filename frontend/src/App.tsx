@@ -3,7 +3,7 @@ import './App.css';
 import ProductCard from './components/ProductCard';
 import { Product, ApiResponse, Category } from './types/Product';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+const API_URL = process.env.REACT_APP_API_URL || `http://${process.env.REACT_APP_API_HOST || 'localhost'}:${process.env.REACT_APP_API_PORT || '8080'}/api`;
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
