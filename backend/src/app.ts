@@ -2,12 +2,14 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import dotenvExpand from 'dotenv-expand';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
 import { ProductRepository } from './repositories/ProductRepository';
 import { CategoryRepository } from './repositories/CategoryRepository';
 
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+const myEnv = dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenvExpand.expand(myEnv);
 
 const app: Application = express();
 
