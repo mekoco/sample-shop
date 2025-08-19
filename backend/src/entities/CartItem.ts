@@ -1,32 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
-import { Order } from './Order';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Cart } from './Cart';
 import { Product } from './Product';
-import { IOrderItem } from '../../../shared/entities/order-item.interface';
+import { ICartItem } from '../../../shared/entities/cart-item.interface';
 
-@Entity('order_items')
-export class OrderItem implements IOrderItem {
+@Entity('cart_items')
+export class CartItem implements ICartItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'uuid' })
-  orderId: string;
+  cartId: string;
 
-  @ManyToOne(() => Order, order => order.items, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'orderId' })
-  order: Order;
+  @ManyToOne(() => Cart, cart => cart.items, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'cartId' })
+  cart: Cart;
 
   @Column({ type: 'uuid' })
   productId: string;
 
-  @ManyToOne(() => Product, product => product.orderItems, { eager: true })
+  @ManyToOne(() => Product, { eager: true })
   @JoinColumn({ name: 'productId' })
   product?: Product;
-
-  @Column({ type: 'varchar', length: 255 })
-  productName: string;
-
-  @Column({ type: 'varchar', length: 100 })
-  productSku: string;
 
   @Column({ type: 'int' })
   quantity: number;

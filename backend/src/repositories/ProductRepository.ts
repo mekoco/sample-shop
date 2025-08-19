@@ -5,27 +5,25 @@ export const ProductRepository = AppDataSource.getRepository(Product).extend({
   async findAllActive() {
     return this.find({
       where: { isActive: true },
-      relations: ['category'],
+      relations: ['categories'],
       order: { createdAt: 'DESC' }
     });
   },
 
   async findByCategory(categoryId: string) {
-    return this.find({
-      where: { 
-        isActive: true,
-        category: { id: categoryId }
-      },
-      relations: ['category'],
-      order: { createdAt: 'DESC' }
-    });
+    return this.createQueryBuilder('product')
+      .where('product.isActive = :isActive', { isActive: true })
+      .leftJoinAndSelect('product.categories', 'category')
+      .where('category.id = :categoryId', { categoryId })
+      .orderBy('product.createdAt', 'DESC')
+      .getMany();
   },
 
   async findWithStock() {
     return this.createQueryBuilder('product')
       .where('product.isActive = :isActive', { isActive: true })
-      .andWhere('product.stock > :stock', { stock: 0 })
-      .leftJoinAndSelect('product.category', 'category')
+      .andWhere('product.stockQuantity > :stock', { stock: 0 })
+      .leftJoinAndSelect('product.categories', 'category')
       .orderBy('product.createdAt', 'DESC')
       .getMany();
   }

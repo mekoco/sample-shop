@@ -1,0 +1,13 @@
+{
+  "name": "@shared/entities",
+  "version": "1.0.0",
+  "description": "Shared entity interfaces for the pet supplies shop",
+  "main": "entities/index.ts",
+  "types": "entities/index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
