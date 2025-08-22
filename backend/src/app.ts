@@ -31,6 +31,10 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
+app.get('/api/hello', (_req: Request, res: Response) => {
+  res.json({ message: 'Hello World' });
+});
+
 app.get('/api/products', async (_req: Request, res: Response, next: NextFunction) => {
   try {
     const products = await ProductRepository.findAllActive();
