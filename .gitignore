@@ -41,3 +41,8 @@ coverage/
 
 # Playwright MCP
 .playwright-mcp/
+
+# Agent files
+agent/
+agent-scripts/
+start-agent.sh
