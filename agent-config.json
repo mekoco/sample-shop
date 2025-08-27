@@ -1,0 +1,37 @@
+{
+  "agentId": 51,
+  "agentType": "tester",
+  "version": "2.0.0",
+  "createdAt": "2025-08-27T02:31:43.568Z",
+  "projectRoot": "/home/rj/dev/agent-framework/agents/sample-shop-51-tester",
+  "repoUrl": "",
+  "defaultBranch": "main",
+  "ports": {
+    "backend": 8510,
+    "frontend": 8511,
+    "redis": 8512
+  },
+  "database": {
+    "host": "localhost",
+    "port": 5532,
+    "user": "petshop_user",
+    "password": "petshop_password",
+    "prefix": "petshop_db"
+  },
+  "claude": {
+    "maxRetries": 3,
+    "retryDelay": 5,
+    "timeout": 300000
+  },
+  "github": {},
+  "paths": {
+    "logs": "./logs",
+    "actionFiles": "./agent/action-files",
+    "scripts": "./agent/scripts",
+    "temp": "./temp"
+  },
+  "agentLabel": "agent-tester:51",
+  "agentDir": "/home/rj/dev/agent-framework/agents/sample-shop-51-tester/agent",
+  "actionFilesDir": "/home/rj/dev/agent-framework/agents/sample-shop-51-tester/agent/action-files",
+  "databaseUri": "postgresql://petshop_user:petshop_password@localhost:5532/undefined"
+}
