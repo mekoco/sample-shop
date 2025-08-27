@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import request from 'supertest';
 import { DataSource } from 'typeorm';
 import { createClient } from 'redis';
-import { app } from '../../app';
+import app from '../../app';
 
 describe('Guest Checkout Integration Tests', () => {
   let dataSource: DataSource;
