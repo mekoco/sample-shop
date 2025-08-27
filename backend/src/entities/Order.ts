@@ -1,20 +1,30 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, OneToMany } from 'typeorm';
 import { User } from './User';
 import { OrderItem } from './OrderItem';
+import { IOrder } from '../../../shared/entities/order.interface';
+import { IShippingAddress, IAddress } from '../../../shared/entities/address.interface';
+import { OrderStatus, PaymentStatus, PaymentMethod } from '../../../shared/entities/types';
 
 @Entity('orders')
-export class Order {
+export class Order implements IOrder {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ type: 'varchar', length: 20, unique: true })
   orderNumber: string;
 
-  @ManyToOne(() => User, user => user.orders)
-  user: User;
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  sessionId?: string;
 
-  @Column({ type: 'enum', enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'], default: 'pending' })
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  @ManyToOne(() => User, user => user.orders, { nullable: true })
+  user?: User;
+
+  @Column({ 
+    type: 'enum', 
+    enum: OrderStatus, 
+    default: OrderStatus.PENDING 
+  })
+  status: OrderStatus;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, transformer: {
     to: (value: number) => value,
@@ -32,7 +42,7 @@ export class Order {
     to: (value: number) => value,
     from: (value: string) => parseFloat(value)
   }})
-  shippingCost: number;
+  shipping: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, transformer: {
     to: (value: number) => value,
@@ -40,41 +50,46 @@ export class Order {
   }})
   total: number;
 
-  @Column({ type: 'text', nullable: true })
-  shippingAddress: string;
+  @Column({ type: 'varchar', length: 3, default: 'USD' })
+  currency: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  shippingCity: string;
+  @Column('jsonb')
+  shippingAddress: IShippingAddress;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  shippingState: string;
+  @Column('jsonb', { nullable: true })
+  billingAddress?: IAddress;
 
-  @Column({ type: 'varchar', length: 20, nullable: true })
-  shippingZipCode: string;
+  @Column({ type: 'varchar', length: 256 })
+  emailHash: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  shippingCountry: string;
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  phone?: string;
 
   @Column({ type: 'text', nullable: true })
   notes: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  paymentMethod: string;
+  @Column({ 
+    type: 'enum', 
+    enum: PaymentMethod,
+    nullable: true
+  })
+  paymentMethod: PaymentMethod;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  transactionId: string;
+  @Column({ 
+    type: 'enum', 
+    enum: PaymentStatus, 
+    default: PaymentStatus.PENDING 
+  })
+  paymentStatus: PaymentStatus;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  paymentIntentId?: string;
 
   @Column({ type: 'timestamp', nullable: true })
-  paidAt: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  shippedAt: Date;
-
-  @Column({ type: 'timestamp', nullable: true })
-  deliveredAt: Date;
+  completedAt?: Date;
 
   @OneToMany(() => OrderItem, orderItem => orderItem.order, { cascade: true })
-  orderItems: OrderItem[];
+  items: OrderItem[];
 
   @CreateDateColumn()
   createdAt: Date;
