@@ -7,11 +7,17 @@ import path from 'path';
 import rateLimit from 'express-rate-limit';
 import { ProductRepository } from './repositories/ProductRepository';
 import { CategoryRepository } from './repositories/CategoryRepository';
+import { helloHandler } from './routes/hello';
 
 const myEnv = dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenvExpand.expand(myEnv);
 
 const app: Application = express();
+
+// Enable strict routing to differentiate between /api/hello and /api/hello/
+app.set('strict routing', true);
+// Enable case-sensitive routing  
+app.set('case sensitive routing', true);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -30,6 +36,8 @@ app.use('/api', limiter);
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
+
+app.get('/api/hello', helloHandler);
 
 app.get('/api/products', async (_req: Request, res: Response, next: NextFunction) => {
   try {
