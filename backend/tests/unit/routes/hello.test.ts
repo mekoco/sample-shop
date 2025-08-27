@@ -4,7 +4,7 @@ import { helloHandler } from '../../../src/routes/hello';
 describe('Hello Route Handler', () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
-  let mockNext: jest.Mock;
+  let _mockNext: jest.Mock;
 
   beforeEach(() => {
     mockRequest = {};
@@ -12,7 +12,7 @@ describe('Hello Route Handler', () => {
       json: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis(),
     };
-    mockNext = jest.fn();
+    _mockNext = jest.fn();
   });
 
   describe('GET /api/hello handler', () => {
